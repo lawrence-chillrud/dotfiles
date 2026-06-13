@@ -28,7 +28,7 @@ degrading gracefully on locked-down nodes where you can't install anything.
 
 ```bash
 # 1. Clone (use your own repo URL once you've pushed this)
-git clone https://github.com/<you>/dotfiles.git ~/dotfiles
+git clone https://github.com/lawrence-chillrud/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # 2. Preview what will change (optional but recommended the first time)
@@ -224,14 +224,14 @@ the built-in **Settings Sync** feature rather than this repo. The
 
 **On your Mac:**
 ```bash
-git clone https://github.com/<you>/dotfiles.git ~/dotfiles
+git clone https://github.com/lawrence-chillrud/dotfiles.git ~/dotfiles
 ~/dotfiles/install.sh --with-omz
 # then install the optional tools (see below) via Homebrew
 ```
 
 **On a new server / HPC login node:**
 ```bash
-git clone https://github.com/<you>/dotfiles.git ~/dotfiles
+git clone https://github.com/lawrence-chillrud/dotfiles.git ~/dotfiles
 ~/dotfiles/install.sh        # no --with-omz if you can't/won't install oh-my-zsh
 exec $SHELL -l
 # create machine-local tweaks if needed:
