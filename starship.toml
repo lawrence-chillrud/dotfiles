@@ -1,0 +1,75 @@
+# ============================================================================
+# starship.toml  —  installed to ~/.config/starship.toml by install.sh
+# ----------------------------------------------------------------------------
+# Cross-shell prompt (zsh local + bash remote) so EVERY machine looks the same.
+# Tuned to stay fast over SSH and to surface the things an ML researcher cares
+# about: which host you're on, which conda/python env, git state, and how long
+# the last command took (great for spotting slow data loads).
+# Install starship:  brew install starship   (mac)
+#                    curl -sS https://starship.rs/install.sh | sh   (linux/HPC)
+# ============================================================================
+
+add_newline = false
+command_timeout = 1000           # don't let a slow module stall the prompt
+
+format = """$username$hostname$directory$git_branch$git_status$python$conda$cmd_duration$jobs$character"""
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"      # turns red on a non-zero exit code
+
+[directory]
+truncation_length = 4
+truncate_to_repo = true
+style = "bold cyan"
+
+[hostname]
+ssh_only = true                  # only show the host when you're SSH'd in
+format = "[@$hostname]($style) "
+style = "bold yellow"
+
+[username]
+show_always = false              # show only for root or over SSH
+format = "[$user]($style)"
+style_user = "bold green"
+style_root = "bold red"
+
+[git_branch]
+symbol = "\uE0A0"
+style = "bold purple"
+
+[git_status]
+style = "bold red"
+# Keep it compact: counts of conflicts/ahead/behind/staged/modified/untracked
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+staged = "+${count}"
+modified = "!${count}"
+untracked = "?${count}"
+stashed = "≡"
+
+[python]
+symbol = " "
+# Show the active python version + venv name (but conda envs handled below)
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+style = "yellow"
+detect_extensions = []           # don't probe every dir for .py — keeps it fast
+
+[conda]
+# DISABLED: conda's own changeps1 "(env)" prefix is used instead, so the label
+# is identical in bash and zsh and never doubled. Flip to false to use this.
+disabled = true
+symbol = " "
+format = "[$symbol$environment]($style) "
+style = "green"
+
+[cmd_duration]
+min_time = 2000                  # only show for commands slower than 2s
+format = "[took $duration]($style) "
+style = "bold yellow"
+
+[jobs]
+symbol = "✦"
+style = "bold blue"

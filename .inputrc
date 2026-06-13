@@ -1,0 +1,27 @@
+# ============================================================================
+# ~/.inputrc  —  GNU readline (affects bash, python REPL, psql, and more)
+# ----------------------------------------------------------------------------
+# zsh has its own line editor (ZLE) and ignores this; it mainly upgrades bash
+# and other readline apps on remote machines.
+# ============================================================================
+
+$include /etc/inputrc
+
+set editing-mode emacs                 # Ctrl-a / Ctrl-e / Ctrl-r as expected
+set completion-ignore-case on          # tab-complete regardless of case
+set completion-map-case on             # treat - and _ as equivalent
+set show-all-if-ambiguous on           # one TAB shows all completions
+set show-all-if-unmodified on
+set colored-stats on                   # colorize completion by file type
+set colored-completion-prefix on
+set mark-symlinked-directories on
+set visible-stats on
+set menu-complete-display-prefix on
+# set bell-style none                    # no terminal beep
+
+# Up/Down arrows search history by what you've already typed
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+# Ctrl-Left / Ctrl-Right jump by word
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word

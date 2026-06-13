@@ -1,0 +1,33 @@
+# ============================================================================
+# ~/.editorconfig  —  consistent formatting across every editor (VS Code, vim,
+# etc.) and every machine. VS Code honors this natively; vim via vim-polyglot
+# or the editorconfig-vim plugin.
+# ============================================================================
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.py]
+indent_size = 4
+max_line_length = 88               # black/ruff default
+
+[*.{r,R,Rmd}]
+indent_size = 2
+
+[*.{yml,yaml,json,toml}]
+indent_size = 2
+
+[*.{js,ts,jsx,tsx,html,css,scss}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false   # trailing spaces are meaningful in markdown
+
+[Makefile]
+indent_style = tab

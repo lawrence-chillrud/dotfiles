@@ -1,0 +1,37 @@
+# ============================================================================
+# ~/.condarc  —  conda / mamba configuration
+# ----------------------------------------------------------------------------
+# Tuned for reproducible scientific Python. Applies to both conda and mamba
+# (mamba reads the same config).
+# ============================================================================
+
+# conda-forge first, and STRICT priority so you never get a broken mix of
+# channels — this is the single most important setting for stable solves.
+channels:
+  - conda-forge
+  - nodefaults
+channel_priority: strict
+
+# Don't auto-activate (base) on every shell — keeps base clean and startup fast.
+# Activate explicitly with `act <env>` / `mamba activate <env>`.
+auto_activate_base: false
+
+# Let conda's own "(env)" prefix manage the prompt label. starship's conda
+# module is disabled (see starship.toml) so you never get a doubled label.
+changeps1: true
+
+# Make pip-installed packages visible to conda's solver (fewer surprises).
+pip_interop_enabled: true
+
+# Be explicit about what's being installed.
+solver: libmamba          # fast solver; bundled with recent conda/mamba
+report_errors: false
+
+# --- HPC tip: relocate envs/pkgs off your (often tiny) home quota ----------
+# Home dirs on clusters are frequently <20GB. Point these at scratch/project
+# storage by uncommenting and editing per machine (or set in ~/.condarc.local
+# style override — conda has no include, so edit here on each cluster):
+# envs_dirs:
+#   - /scratch/$USER/conda/envs
+# pkgs_dirs:
+#   - /scratch/$USER/conda/pkgs

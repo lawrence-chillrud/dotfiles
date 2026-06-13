@@ -1,0 +1,96 @@
+# ============================================================================
+# ~/.gitignore_global  —  patterns ignored in EVERY repo on this machine
+# ----------------------------------------------------------------------------
+# Keep this for noise that's machine/editor/runtime specific. Project-specific
+# data ignores still belong in each repo's own .gitignore.
+# ============================================================================
+
+# --- OS cruft ---------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+
+# --- Editors / IDEs ---------------------------------------------------------
+*.swp
+*.swo
+*~
+.idea/
+*.sublime-*
+# VS Code: ignore personal settings but let teams share .vscode if they want
+# (comment the next line out in a repo where you DO commit .vscode/)
+.vscode/
+
+# --- Python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+.python-version
+
+# --- Jupyter / notebooks ----------------------------------------------------
+*-checkpoint.ipynb
+profile_default/
+ipython_config.py
+
+# --- conda / mamba ----------------------------------------------------------
+# (you commit environment.yml, not the resolved env)
+.conda/
+
+# --- R / renv ---------------------------------------------------------------
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+# renv: commit renv.lock + the activation scripts, ignore the heavy library
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/staging/
+
+# --- ML artifacts (usually too big / regenerable for git) -------------------
+# Loosen these per-project if you DO want to track a small checkpoint.
+*.ckpt
+*.pt
+*.pth
+*.h5
+*.hdf5
+*.onnx
+*.pb
+*.safetensors
+*.npz
+wandb/
+mlruns/
+lightning_logs/
+outputs/
+checkpoints/
+
+# --- Secrets / local config -------------------------------------------------
+.env
+.env.*
+*.pem
+*.key
+secrets.*
+
+# --- Logs / scratch ---------------------------------------------------------
+*.log
+slurm-*.out
+core
+*.tmp

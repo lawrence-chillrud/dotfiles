@@ -1,0 +1,68 @@
+# ============================================================================
+# ssh_config.example  ->  copy to ~/.ssh/config and EDIT for your hosts.
+# ----------------------------------------------------------------------------
+# install.sh copies (never symlinks) this to ~/.ssh/config ONLY if you don't
+# already have one — your real SSH config contains host-specific info and
+# usually shouldn't live in a public dotfiles repo. Keep the template here as
+# documentation of your preferred defaults.
+#
+# These defaults make VS Code Remote-SSH dramatically faster (connection
+# multiplexing means the 2nd/3rd channel VS Code opens reuses the 1st) and keep
+# long sessions alive through flaky networks.
+# ============================================================================
+
+# --- Global defaults (apply to all hosts) -----------------------------------
+Host *
+    # Keep idle connections alive: ping every 60s, give up after 3 misses.
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+
+    # Connection multiplexing: reuse one TCP connection for many sessions.
+    # Huge speedup for VS Code Remote-SSH, rsync loops, and rapid `ssh` calls.
+    ControlMaster auto
+    ControlPath ~/.ssh/sockets/%r@%h:%p
+    ControlPersist 10m
+
+    # Compression helps on slow/HPC links (mild CPU cost).
+    Compression yes
+
+    # Prefer your modern key; don't try every key in the agent (avoids lockouts).
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+    # macOS: store passphrase in keychain (ignored on Linux)
+    UseKeychain yes
+
+# IMPORTANT: create the sockets dir once, or ControlPath fails silently:
+#   mkdir -p ~/.ssh/sockets && chmod 700 ~/.ssh/sockets
+
+# --- Example: a plain remote workstation/server ------------------------------
+Host gpu-box
+    HostName gpu-box.lab.example.edu
+    User your_username
+    IdentityFile ~/.ssh/id_ed25519
+    # Forward your agent so you can git-push from the remote using local keys.
+    ForwardAgent yes
+
+# --- Example: HPC cluster reached through a login/bastion node ---------------
+# Pattern: you can only reach compute via a login node. ProxyJump tunnels
+# through it transparently, so `ssh hpc-compute` just works (and VS Code can
+# attach to the login node directly).
+Host hpc-login
+    HostName login.hpc.example.edu
+    User your_hpc_username
+    IdentityFile ~/.ssh/id_ed25519
+    # Some clusters require interactive 2FA — disable multiplexing if it fights
+    # with your MFA prompt by setting:  ControlMaster no
+
+Host hpc-compute
+    HostName node042
+    User your_hpc_username
+    ProxyJump hpc-login
+    IdentityFile ~/.ssh/id_ed25519
+
+# --- Example: wildcard for a whole cluster's internal nodes ------------------
+Host node*.hpc.example.edu
+    User your_hpc_username
+    ProxyJump hpc-login
+    StrictHostKeyChecking accept-new   # auto-trust new compute nodes

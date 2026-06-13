@@ -1,0 +1,108 @@
+# ============================================================================
+# ~/.gitconfig
+# ----------------------------------------------------------------------------
+# >>> EDIT the [user] block below before committing this to a repo. <<<
+# Per-machine secrets / different work identities go in ~/.gitconfig.local
+# (untracked) which is included at the very bottom and overrides this file.
+# ============================================================================
+
+[user]
+	name = Your Name
+	email = you@example.com
+	# To sign commits with SSH (modern, no GPG needed), uncomment & set key:
+	# signingkey = ~/.ssh/id_ed25519.pub
+
+[init]
+	defaultBranch = main
+
+[core]
+	editor = vim
+	autocrlf = input            # store LF, don't mangle line endings
+	excludesfile = ~/.gitignore_global
+	pager = less -FRX
+	# If you install `delta`, switch the pager (see [delta] note at bottom).
+
+[pull]
+	rebase = true               # linear history; no noisy merge commits on pull
+
+[push]
+	default = simple
+	autoSetupRemote = true      # `git push` on a new branch just works
+	followTags = true
+
+[fetch]
+	prune = true                # drop local refs to deleted remote branches
+
+[rebase]
+	autoStash = true            # auto-stash/pop around rebases
+	autosquash = true
+
+[merge]
+	conflictstyle = zdiff3      # shows the common ancestor in conflicts
+
+[diff]
+	algorithm = histogram
+	colorMoved = default        # distinguish moved lines from real changes
+
+[color]
+	ui = auto
+
+[branch]
+	sort = -committerdate       # most-recently-used branches first
+
+[help]
+	autocorrect = prompt        # "did you mean ...?" before running
+
+[rerere]
+	enabled = true              # remember conflict resolutions, replay them
+
+# --- Aliases (mirror your shell aliases; usable on machines w/o the dotfiles)
+[alias]
+	st = status -sb
+	co = checkout
+	br = branch
+	ci = commit
+	ca = commit --amend
+	cm = commit -m
+	unstage = reset HEAD --
+	last = log -1 HEAD --stat
+	lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) %C(green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+	ll = log --oneline --graph --decorate -20
+	wip = !git add -A && git commit -m 'WIP'         # quick checkpoint
+	undo = reset --soft HEAD~1                        # undo last commit, keep changes
+	amend = commit --amend --no-edit
+	aliases = config --get-regexp ^alias\\.
+	root = rev-parse --show-toplevel
+	# What changed on the current branch vs main:
+	review = !git diff main...HEAD
+
+# --- Credential helper (auto-selected per OS) -------------------------------
+# macOS: keychain. Linux: cache for 1h. Adjust as you prefer.
+[credential]
+	helper = cache --timeout=3600
+[includeIf "gitdir:~/"]
+	# placeholder include so the [credential] above is the base default
+
+# --- LFS (uncomment if you version large model checkpoints with git-lfs) ----
+# [filter "lfs"]
+# 	clean = git-lfs clean -- %f
+# 	smudge = git-lfs smudge -- %f
+# 	process = git-lfs filter-process
+# 	required = true
+
+# --- delta integration (only enable AFTER installing `delta`) ---------------
+# Uncomment these three sections + set core.pager = delta above:
+# [delta]
+# 	navigate = true
+# 	line-numbers = true
+# 	side-by-side = true
+# [interactive]
+# 	diffFilter = delta --color-only
+# [merge]
+# 	tool = delta
+
+# --- Per-machine / per-identity overrides (NOT committed) -------------------
+# Create ~/.gitconfig.local with a different [user] for work machines, the
+# macOS osxkeychain helper, signing keys, etc. Values here win over the above.
+[include]
+	path = ~/.gitconfig.local
