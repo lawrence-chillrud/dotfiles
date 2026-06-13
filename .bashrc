@@ -22,8 +22,8 @@ HISTFILESIZE=200000
 HISTCONTROL=ignoreboth:erasedups     # ignore dups + space-prefixed; prune old dups
 HISTTIMEFORMAT='%F %T '              # timestamp each entry
 shopt -s histappend                  # append instead of overwriting on exit
-# Flush history after every command AND keep multi-shell history in sync.
-PROMPT_COMMAND="history -a; history -n;${PROMPT_COMMAND:+ $PROMPT_COMMAND}"
+# Note: PROMPT_COMMAND is set in .shell_common.sh after tools (zoxide, starship)
+# are initialized, so we don't conflict with their hooks here.
 
 # --- Shell behavior -----------------------------------------------------------
 shopt -s checkwinsize                # keep $LINES/$COLUMNS correct after resize
@@ -65,7 +65,14 @@ if ! command -v starship >/dev/null 2>&1; then
     [ $ec -ne 0 ] && symcol='\[\e[0;31m\]'
     PS1="\[\e[0;32m\]$(__conda_env)\[\e[0m\]${__host_tag}\[\e[1;34m\]\w\[\e[0;33m\]$(__git_branch)\[\e[0m\]\n${symcol}${sym}\[\e[0m\] "
   }
-  PROMPT_COMMAND="__set_prompt;${PROMPT_COMMAND:+ $PROMPT_COMMAND}"
+  # Set PROMPT_COMMAND for history sync + custom prompt.
+  # Append __set_prompt only if PROMPT_COMMAND is not already set (by zoxide/etc).
+  if [ -z "$PROMPT_COMMAND" ]; then
+    PROMPT_COMMAND="history -a; history -n; __set_prompt"
+  else
+    # zoxide or another tool already set PROMPT_COMMAND; prepend history ops
+    PROMPT_COMMAND="history -a; history -n; __set_prompt; $PROMPT_COMMAND"
+  fi
 fi
 
 # --- Machine-local overrides (NOT tracked in git) ----------------------------
