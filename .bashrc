@@ -60,10 +60,10 @@ if ! command -v starship >/dev/null 2>&1; then
   [ -n "$SSH_CONNECTION" ] && __host_tag='\[\e[0;36m\]\u@\h\[\e[0m\]:'
   __set_prompt() {
     local ec=$?
-    local sym='$'
+    local sym='❯'
     local symcol='\[\e[0;32m\]'
     [ $ec -ne 0 ] && symcol='\[\e[0;31m\]'
-    PS1="\[\e[0;32m\]$(__conda_env)\[\e[0m\]${__host_tag}\[\e[1;34m\]\w\[\e[0;33m\]$(__git_branch)\[\e[0m\]\n${symcol}${sym}\[\e[0m\] "
+    PS1="\[\e[0;32m\]$(__conda_env)\[\e[0m\]${__host_tag}\[\e[1;34m\]\w\[\e[0;33m\]$(__git_branch)\[\e[0m\] ${symcol}${sym}\[\e[0m\] "
   }
   # Set PROMPT_COMMAND for history sync + custom prompt.
   # Append __set_prompt only if PROMPT_COMMAND is not already set (by zoxide/etc).
@@ -77,3 +77,5 @@ fi
 
 # --- Machine-local overrides (NOT tracked in git) ----------------------------
 [ -f "$HOME/.bashrc.local" ] && source "$HOME/.bashrc.local"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
