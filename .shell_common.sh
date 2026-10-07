@@ -154,6 +154,9 @@ condaexport() {
   ${CONDA_FRONTEND:-conda} env export -n "$name" --no-builds --from-history
 }
 
+# --- R aliases ----------------------------------------------------------------
+alias R="R --no-save"
+
 # --- GPU / ML helpers ---------------------------------------------------------
 if command -v nvidia-smi >/dev/null 2>&1; then
   alias gpu='nvidia-smi'
